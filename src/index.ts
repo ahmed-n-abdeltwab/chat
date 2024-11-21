@@ -1,40 +1,30 @@
+// @ts-check
 
-console.log("hello world");
-// const express =  'express';
-// const app = express();
+import express from 'express';
+const app: express.Application = express();
 
-// // product router
-// import imageRouter from './routes/imageRoutes';
+// routers
 
-// // error handlers
-// import notFoundMiddleware from './middlewares/not-found.middleware';
-// import errorHandlerMiddleware from './middlewares/error.middleware';
+// error handlers
 
-// // logger
-// import Logger from './middlewares/logger.middleware';
+// logger
 
-// // logger
-// import cacheMiddleware from './middlewares/cache.middleware';
+// cacheMiddleware
 
-// // middleware
-// app.use(express.json());
-// app.use(Logger);
-// app.use(cacheMiddleware);
+// middleware
+app.use(express.json());
 
-// app.get('/', (req: express.Request, res: express.Response): void => {
-// 	res.status(200).send(
-// 		'<h1>Image Processing API</h1><a href="/api/images">images route</a>'
-// 	);
-// });
-// app.use('/api/images', imageRouter);
+app.get('/', (req: express.Request, res: express.Response): void => {
+	res.status(200).send(
+		'<h1>Image Processing API</h1><a href="/api/images">images route</a>'
+	);
+});
 
-// app.use(notFoundMiddleware);
-// app.use(errorHandlerMiddleware);
 
-// const port = 5000;
+const port = 5000;
 
-// app.listen(port, (): void =>
-// 	console.log(`Server is listening at http://localhost:${port}`)
-// );
+app.listen(port, (): void =>
+	console.log(`Server is listening at http://localhost:${port}`)
+);
 
-// export default app;
+export default app;
