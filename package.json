@@ -1,0 +1,25 @@
+{
+  "name": "chat",
+  "version": "1.0.0",
+  "description": "chat app",
+  "main": "index.js",
+  "scripts": {
+    "start": "src/index.ts",
+    "build": "npx tsc",
+    "prettier": "prettier --config .prettierrc 'src/**/*.ts' --write"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ahmed-n-abdeltwab/chat.git"
+  },
+  "author": "ahmed nasser",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ahmed-n-abdeltwab/chat/issues"
+  },
+  "homepage": "https://github.com/ahmed-n-abdeltwab/chat#readme",
+  "devDependencies": {
+    "prettier": "^3.3.3",
+    "typescript": "^5.6.3"
+  }
+}
