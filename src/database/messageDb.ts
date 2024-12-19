@@ -35,7 +35,7 @@ export class MessageDb {
   /**
    * Saves a message to the database.
    * Adds a timestamp to the message before saving.
-   * 
+   *
    * @param message - The message object to be saved.
    * @returns A promise that resolves to the saved message object.
    * @throws {DatabaseError} If there is an error while saving the message.
@@ -65,7 +65,7 @@ export class MessageDb {
   /**
    * Retrieves all messages from the database.
    * Messages are sorted by their timestamp in ascending order.
-   * 
+   *
    * @returns A promise that resolves to an array of message objects.
    * @throws {DatabaseError} If there is an error while fetching the messages.
    */
