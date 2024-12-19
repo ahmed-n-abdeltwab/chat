@@ -1,2 +1,25 @@
+# Dependencies
 node_modules
-*.json
+package-lock.json
+
+# Build output
+dist
+build
+coverage
+
+# Environment files
+.env*
+
+# IDE files
+.vscode
+.idea
+
+# Database files
+*.db
+
+# Logs
+*.log
+
+# System files
+.DS_Store
+Thumbs.db

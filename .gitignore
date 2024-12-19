@@ -1,7 +1,4 @@
+# ignore node modules
 node_modules
-package-lock.json
-build
-
-# logs file ignore 
-logs*
-
+# ignore chat.db
+data
