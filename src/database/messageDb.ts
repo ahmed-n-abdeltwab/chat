@@ -4,19 +4,42 @@ import { Message } from '../types/message';
 import { DatabaseError } from '../utils/errors';
 import Logger from '../utils/logger';
 
+/**
+ * The MessageDb class provides methods to interact with the message database.
+ * It allows saving and retrieving messages with timestamp indexing.
+ */
 export class MessageDb {
+  /**
+   * The database instance used for storing and retrieving messages.
+   */
   private db: Datastore;
 
+  /**
+   * Initializes a new instance of the MessageDb class.
+   * Sets up the database and ensures indexes are created.
+   */
   constructor() {
     this.db = new Datastore(dbConfig);
     this.setupIndexes();
   }
 
+  /**
+   * Sets up the necessary indexes for the database.
+   * Ensures that the 'timestamp' field is indexed for efficient querying.
+   */
   private setupIndexes(): void {
     this.db.ensureIndex({ fieldName: 'timestamp' });
     Logger.info('Database indexes setup completed');
   }
 
+  /**
+   * Saves a message to the database.
+   * Adds a timestamp to the message before saving.
+   * 
+   * @param message - The message object to be saved.
+   * @returns A promise that resolves to the saved message object.
+   * @throws {DatabaseError} If there is an error while saving the message.
+   */
   public async saveMessage(message: Message): Promise<Message> {
     try {
       const messageWithTimestamp: Message = {
@@ -39,6 +62,13 @@ export class MessageDb {
     }
   }
 
+  /**
+   * Retrieves all messages from the database.
+   * Messages are sorted by their timestamp in ascending order.
+   * 
+   * @returns A promise that resolves to an array of message objects.
+   * @throws {DatabaseError} If there is an error while fetching the messages.
+   */
   public async getMessages(): Promise<Message[]> {
     try {
       return await new Promise((resolve, reject) => {
