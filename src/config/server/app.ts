@@ -1,7 +1,10 @@
 import express from 'express';
 import path from 'path';
-import { errorHandler } from '../middleware/errorHandler';
-import { requestLogger } from '../middleware/requestLogger';
+import { errorHandler } from '../../middleware/errorHandler';
+import { requestLogger } from '../../middleware/requestLogger';
+import { MessageDb } from '../../database/messageDb';
+import { MessageService } from '../../services/messageService';
+import { createMessageRoutes } from '../../routes/messageRoutes';
 
 /**
  * Creates and configures an Express application.
@@ -23,7 +26,11 @@ export function createApp(): express.Application {
   // Middleware
   app.use(express.json());
   app.use(requestLogger);
-
+  // Initialize services
+  const messageDb = new MessageDb();
+  const messageService = new MessageService(messageDb);
+  // Routes
+  app.use('/api/messages', createMessageRoutes(messageService));
   // Error handling - should be last
   app.use(errorHandler);
 

@@ -1,4 +1,5 @@
 import path from 'path';
+import fs from 'fs';
 
 /**
  * Interface representing the configuration for the database.
@@ -21,7 +22,17 @@ export interface DbConfig {
  * @property {string} filename - The path to the database file.
  * @property {boolean} autoload - Whether to autoload the database.
  */
+const dbDirectory = path.join(process.cwd(), 'data');
+try {
+  if (!fs.existsSync(dbDirectory)) {
+    fs.mkdirSync(dbDirectory, { recursive: true });
+  }
+} catch (error) {
+  console.error(`Failed to create directory ${dbDirectory}:`, error);
+  throw error;
+}
+
 export const dbConfig: DbConfig = {
-  filename: path.join(process.cwd(), 'data', 'chat.db'),
+  filename: path.join(dbDirectory, 'chat.db'),
   autoload: true,
 };
