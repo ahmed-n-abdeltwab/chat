@@ -1,4 +1,4 @@
-import { Message } from '../types/message';
+import { Message } from '../types/database';
 
 export function validateMessage(message: unknown): Message {
   if (!message || typeof message !== 'object') {
