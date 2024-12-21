@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { AppError } from '../utils/errors';
-import { ErrorResponse } from '../types/http';
+import { ErrorResponse } from '../types/server/http';
 import Logger from '../utils/logger';
 
 /**
