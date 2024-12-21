@@ -1,5 +1,6 @@
-import { Message } from '../types/message';
+import { Message } from '../types/database';
 import { MessageDb } from '../database/messageDb';
+import { withErrorHandler } from '../utils/asyncHandler';
 
 /**
  * Service class for handling message-related operations.
@@ -19,12 +20,10 @@ export class MessageService {
    */
   public async saveMessage(message: Message): Promise<Message> {
     // Implementation here
-    try {
-      return await this.db.saveMessage(message);
-    } catch (error) {
-      console.error('Error saving message:', error);
-      throw new Error('Failed to save message');
-    }
+    return withErrorHandler(
+      async () => this.db.saveMessage(message),
+      'Error saving message'
+    );
   }
 
   /**
@@ -34,11 +33,9 @@ export class MessageService {
    */
   public async getMessages(): Promise<Message[]> {
     // Implementation here
-    try {
-      return await this.db.getMessages();
-    } catch (error) {
-      console.error('Error fetching messages:', error);
-      throw new Error('Failed to fetch messages');
-    }
+    return withErrorHandler(
+      async () => this.db.getMessages(),
+      'Error fetching messages'
+    );
   }
 }

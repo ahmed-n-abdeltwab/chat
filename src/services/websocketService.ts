@@ -1,7 +1,8 @@
 import WebSocket from 'ws';
-import { Message, MessageResponse } from '../types/message';
+import { Message, MessageResponse } from '../types/database';
 import { MessageService } from './messageService';
 import { validateMessage } from '../utils/validation';
+import { withErrorHandler } from '../utils/asyncHandler';
 import Logger from '../utils/logger';
 
 /**
@@ -47,13 +48,11 @@ export class WebSocketService {
    * @param ws - The WebSocket client to send the message history to.
    */
   private async sendMessageHistory(ws: WebSocket): Promise<void> {
-    try {
+    await withErrorHandler(async () => {
       const messages = await this.messageService.getMessages();
       const response: MessageResponse = { type: 'history', messages };
       ws.send(JSON.stringify(response));
-    } catch (error) {
-      Logger.error('Error sending message history:', error as Error);
-    }
+    }, 'Error sending message history');
   }
 
   /**
