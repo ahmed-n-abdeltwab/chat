@@ -1,6 +1,6 @@
 import Datastore from 'nedb';
 import { dbConfig } from '../config/database';
-import { Message } from '../types/message';
+import { Message } from '../types/database';
 import { DatabaseError } from '../utils/errors';
 import Logger from '../utils/logger';
 
