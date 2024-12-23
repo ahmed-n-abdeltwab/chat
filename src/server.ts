@@ -1,6 +1,6 @@
 import { createServer } from './config/server';
-import { setupProcessHandlers } from './utils/server/processHandlers';
-import Logger from './utils/logger';
+import { setupProcessHandlers } from './utils/processHandlers';
+import Logger from './logger';
 
 async function startServer(): Promise<void> {
   try {

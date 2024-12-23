@@ -1,6 +1,6 @@
 import { Server } from 'http';
 import { Server as WebSocketServer } from 'ws';
-import Logger from './logger';
+import Logger from '../logger';
 
 export async function closeServer(
   httpServer: Server,

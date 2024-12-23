@@ -1,8 +1,8 @@
 import Datastore from 'nedb';
 import { dbConfig } from '../config/database';
 import { Message } from '../types/database';
-import { DatabaseError } from '../utils/errors';
-import Logger from '../utils/logger';
+import { DatabaseError } from '../errors';
+import Logger from '../logger';
 
 /**
  * The MessageDb class provides methods to interact with the message database.

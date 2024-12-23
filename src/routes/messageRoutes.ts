@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { MessageController } from '../controllers/messageController';
+import { MessageController } from '../controllers/database/messageController';
 import { MessageService } from '../services/messageService';
 
 export function createMessageRoutes(messageService: MessageService): Router {

@@ -3,7 +3,7 @@ import { Message, MessageResponse } from '../types/database';
 import { MessageService } from './messageService';
 import { validateMessage } from '../utils/validation';
 import { withErrorHandler } from '../utils/asyncHandler';
-import Logger from '../utils/logger';
+import Logger from '../logger';
 
 /**
  * Service to manage WebSocket connections and handle communication between clients.

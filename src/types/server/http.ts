@@ -1,4 +1,5 @@
 import { Response } from 'express';
+import { ErrorDetails } from '../error';
 
 /**
  * Represents the structure of an API response.
@@ -19,6 +20,7 @@ export interface ErrorResponse extends ApiResponse {
   status: 'error';
   message: string;
   code?: string;
+  details?: ErrorDetails;
 }
 
 export type ApiHandler<T> = (res: Response) => Promise<T>;

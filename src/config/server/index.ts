@@ -3,7 +3,7 @@ import { createApp } from './app';
 import { setupWebSocket } from './websocket';
 import { serverConfig } from './config';
 import { withErrorHandler } from '../../utils/asyncHandler';
-import Logger from '../../utils/logger';
+import Logger from '../../logger';
 
 export async function createServer(): Promise<http.Server> {
   return withErrorHandler(async () => {

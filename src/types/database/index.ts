@@ -1,4 +1,23 @@
 /**
+ * Interface representing the configuration for the database.
+ */
+export interface DbConfig {
+  /**
+   * The filename of the database.
+   */
+  filename: string;
+
+  /**
+   * A flag indicating whether the database should be autoloaded.
+   */
+  options?: {
+    autoload: boolean;
+    autosave: boolean;
+    autosaveInterval: number;
+    persistenceMethod: 'fs' | 'localStorage' | 'memory' | null | undefined;
+  };
+}
+/**
  * Represents a chat message.
  */
 export interface Message {
