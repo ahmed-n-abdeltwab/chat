@@ -10,5 +10,13 @@
   "endOfLine": "lf",
   "bracketSameLine": false,
   "quoteProps": "as-needed",
-  "proseWrap": "preserve"
+  "proseWrap": "preserve",
+  "overrides": [
+    {
+      "files": "public/**/*.{js,html,css}",
+      "options": {
+        "tabWidth": 4
+      }
+    }
+  ]
 }

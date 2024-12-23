@@ -1,10 +1,16 @@
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import { AppError } from '../../errors/AppError';
 import { ErrorResponse } from '../../types/error';
 import Logger from '../../logger';
 
-export function errorHandler(error: Error, _req: Request, res: Response): void {
+export function errorHandler(
+  error: Error,
+  _req: Request,
+  res: Response,
+  _next: NextFunction
+): void {
   Logger.error('Error caught by error handler:', error);
+
   let statusCode = 500;
   const response: ErrorResponse = {
     status: 'error',

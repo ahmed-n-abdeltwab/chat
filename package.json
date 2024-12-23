@@ -9,8 +9,9 @@
     "build": "tsc",
     "lint": "eslint src/**/*.ts",
     "lint:fix": "eslint src/**/*.ts --fix",
-    "format": "prettier --write \"src/**/*.{ts,json,md}\"",
-    "format:check": "prettier --check \"src/**/*.{ts,json,md}\"",
+    "format": "prettier --write \"src/**/*.{ts,json,md}\" \"public/**/*.{js,html,css}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,json,md}\" \"public/**/*.{js,html,css}\"",
+    "format:public": "prettier --write \"public/**/*.{js,html,css}\"",
     "test": "jest"
   },
   "repository": {
