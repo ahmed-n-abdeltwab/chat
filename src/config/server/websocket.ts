@@ -1,6 +1,6 @@
 import http from 'http';
 import WebSocket from 'ws';
-import { MessageDb } from '../../controllers/database/messageDb';
+import { MessageDb } from '../../database/messageDb';
 import { MessageService } from '../../services/messageService';
 import { WebSocketService } from '../../services/websocketService';
 import { withErrorHandler } from '../../utils/asyncHandler';
