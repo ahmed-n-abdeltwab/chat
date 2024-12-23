@@ -1,4 +1,4 @@
-import { createServer } from './config/server';
+import { createServer } from './config/websocket';
 import { setupProcessHandlers } from './utils/processHandlers';
 import Logger from './logger';
 

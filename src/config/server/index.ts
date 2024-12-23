@@ -1,24 +1,43 @@
-import http from 'http';
-import { createApp } from './app';
-import { setupWebSocket } from './websocket';
-import { serverConfig } from './config';
-import { withErrorHandler } from '../../utils/asyncHandler';
-import Logger from '../../logger';
+import express from 'express';
+import path from 'path';
+import { errorHandler } from '../../middleware/error/errorHandler';
+import { requestLogger } from '../../middleware/logger';
+import { MessageDb } from '../../database/messageDb';
+import { MessageService } from '../../services/messageService';
+import { createMessageRoutes } from '../../routes/messageRoutes';
 
-export async function createServer(): Promise<http.Server> {
-  return withErrorHandler(async () => {
-    const app = createApp();
-    const server = http.createServer(app);
+/**
+ * Creates and configures an Express application.
+ *
+ * This function sets up the Express application with the following:
+ * - Serves static files from the `public` directory.
+ * - Parses incoming JSON requests.
+ * - Uses a custom request logger middleware.
+ * - Uses a custom error handler middleware (should be the last middleware).
+ *
+ * @returns {express.Application} The configured Express application instance.
+ */
+export function createApp(): express.Application {
+  const app = express();
 
-    // Setup WebSocket
-    setupWebSocket(server);
+  // Static files
+  const publicDir = path.join(__dirname, '../../../public');
+  app.use(express.static(publicDir));
 
-    // Start listening
-    server.listen(serverConfig.port);
+  // Middleware
+  app.use(express.json());
+  app.use(requestLogger);
+  // Initialize services
+  const messageDb = new MessageDb();
+  const messageService = new MessageService(messageDb);
 
-    Logger.info(`Server is running on port ${serverConfig.port}`);
-    Logger.info(`Environment: ${serverConfig.env}`);
+  // Routes
+  app.get('/', (_req, res) => {
+    res.sendFile(path.join(publicDir, 'index.html'));
+  });
+  app.use('/api/messages', createMessageRoutes(messageService));
+  // Error handling - should be last
+  app.use(errorHandler);
 
-    return server;
-  }, 'Failed to create server');
+  return app;
 }
