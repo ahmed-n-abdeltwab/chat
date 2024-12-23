@@ -21,7 +21,8 @@ export function createApp(): express.Application {
   const app = express();
 
   // Static files
-  app.use(express.static(path.join(__dirname, '../../public')));
+  const publicDir = path.join(__dirname, '../../../public');
+  app.use(express.static(publicDir));
 
   // Middleware
   app.use(express.json());
@@ -29,7 +30,11 @@ export function createApp(): express.Application {
   // Initialize services
   const messageDb = new MessageDb();
   const messageService = new MessageService(messageDb);
+
   // Routes
+  app.get('/', (_req, res) => {
+    res.sendFile(path.join(publicDir, 'index.html'));
+  });
   app.use('/api/messages', createMessageRoutes(messageService));
   // Error handling - should be last
   app.use(errorHandler);
