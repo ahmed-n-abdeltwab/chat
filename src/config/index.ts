@@ -1,4 +1,4 @@
-import { ServerConfig } from '../../types/server';
+import { ServerConfig } from '../types/server';
 
 export const serverConfig: ServerConfig = {
   port: Number(process.env.PORT) || 3000,

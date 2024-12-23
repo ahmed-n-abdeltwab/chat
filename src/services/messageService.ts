@@ -1,5 +1,5 @@
 import { Message } from '../types/database';
-import { MessageDb } from '../controllers/database/messageDb';
+import { MessageDb } from '../database/messageDb';
 import { withErrorHandler } from '../utils/asyncHandler';
 
 /**
