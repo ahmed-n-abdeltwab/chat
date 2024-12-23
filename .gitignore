@@ -1,6 +1,4 @@
 # ignore node modules
 node_modules
-# ignore chat.db
-data
-
 .vscode
+*package-lock.json

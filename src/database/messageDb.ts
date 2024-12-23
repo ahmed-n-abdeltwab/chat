@@ -1,58 +1,51 @@
-import Datastore from 'nedb';
+import Loki from 'lokijs';
+import { Message } from '../types/database';
+import { DatabaseError } from '../errors';
+import Logger from '../logger';
 import { dbConfig } from '../config/database';
-import { Message } from '../types/message';
-import { DatabaseError } from '../utils/errors';
-import Logger from '../utils/logger';
+import { DatabaseCollections, initializeCollections } from './collections';
 
 export class MessageDb {
-  private db: Datastore;
+  private db: Loki;
+  private collections: DatabaseCollections;
 
   constructor() {
-    this.db = new Datastore(dbConfig);
-    this.setupIndexes();
-  }
-
-  private setupIndexes(): void {
-    this.db.ensureIndex({ fieldName: 'timestamp' });
-    Logger.info('Database indexes setup completed');
+    try {
+      this.db = new Loki(dbConfig.filename, dbConfig.options);
+      this.collections = initializeCollections(this.db);
+      Logger.info('Message database initialized successfully');
+    } catch (error) {
+      Logger.error('Failed to initialize database:', error as Error);
+      throw new DatabaseError('Database initialization failed');
+    }
   }
 
   public async saveMessage(message: Message): Promise<Message> {
     try {
-      const messageWithTimestamp: Message = {
+      const savedMessage = this.collections.messages.insert({
         ...message,
         timestamp: new Date(),
-      };
-
-      return await new Promise((resolve, reject) => {
-        this.db.insert(
-          messageWithTimestamp,
-          (err: Error | null, doc: Message) => {
-            if (err) reject(new DatabaseError('Failed to save message'));
-            else resolve(doc);
-          }
-        );
       });
+
+      if (!savedMessage) {
+        throw new DatabaseError(
+          'Failed to save message - no document returned'
+        );
+      }
+
+      return savedMessage;
     } catch (error) {
-      Logger.error('Database error while saving message:', error as Error);
-      throw error;
+      Logger.error('Failed to save message:', error as Error);
+      throw new DatabaseError('Failed to save message');
     }
   }
 
   public async getMessages(): Promise<Message[]> {
     try {
-      return await new Promise((resolve, reject) => {
-        this.db
-          .find({})
-          .sort({ timestamp: 1 })
-          .exec((err: Error | null, docs: Message[]) => {
-            if (err) reject(new DatabaseError('Failed to fetch messages'));
-            else resolve(docs);
-          });
-      });
+      return this.collections.messages.chain().simplesort('timestamp').data();
     } catch (error) {
-      Logger.error('Database error while fetching messages:', error as Error);
-      throw error;
+      Logger.error('Failed to fetch messages:', error as Error);
+      throw new DatabaseError('Failed to fetch messages');
     }
   }
 }

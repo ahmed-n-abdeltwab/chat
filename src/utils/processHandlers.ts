@@ -1,4 +1,4 @@
-import Logger from './logger';
+import Logger from '../logger';
 
 export function setupProcessHandlers(): void {
   process.on('unhandledRejection', (error: Error) => {
