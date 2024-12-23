@@ -2,7 +2,7 @@ import express from 'express';
 import path from 'path';
 import { errorHandler } from '../../middleware/error/errorHandler';
 import { requestLogger } from '../../middleware/requestLogger';
-import { MessageDb } from '../../controllers/database/messageDb';
+import { MessageDb } from '../../database/messageDb';
 import { MessageService } from '../../services/messageService';
 import { createMessageRoutes } from '../../routes/messageRoutes';
 
