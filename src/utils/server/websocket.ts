@@ -1,5 +1,5 @@
 import WebSocket from 'ws';
-import { WebSocketClient } from '../../types/server/websocket';
+import { WebSocketClient } from '../../types';
 /**
  * Manages WebSocket connections.
  */

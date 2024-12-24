@@ -1,5 +1,5 @@
 import Loki from 'lokijs';
-import { Message, User } from '../types/database';
+import { Message, User } from '../types';
 
 /**
  * Interface representing the database collections.

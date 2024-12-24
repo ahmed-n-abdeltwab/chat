@@ -1,10 +1,9 @@
 import { Router } from 'express';
-import { AuthService } from '../services/authService';
-import { UserDb } from '../database/userDb';
-import { asyncRouteHandler } from '../utils/asyncHandler';
-import { initializeCollections } from '../database/collections';
+import { AuthService } from '../services';
+import { UserDb, initializeCollections } from '../database';
+import { asyncRouteHandler } from '../utils';
 import Loki from 'lokijs';
-import { dbConfig } from '../config/database'; // Import dbConfig
+import { dbConfig } from '../config'; // Import dbConfig
 
 export function createAuthRoutes(): Router {
   const router = Router();

@@ -1,13 +1,4 @@
-import { ServerConfig } from '../types/server';
-
-/**
- * Configuration for the server.
- */
-export const serverConfig: ServerConfig = {
-  port: Number(process.env.PORT) || 3000,
-  env: process.env.NODE_ENV || 'development',
-  cors: {
-    origin: process.env.CORS_ORIGIN || '*',
-    methods: ['GET', 'POST'],
-  },
-};
+export * from './dotenv';
+export * from './database';
+export * from './server';
+export * from './websocket';

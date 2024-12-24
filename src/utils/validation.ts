@@ -1,5 +1,4 @@
-import { ValidationSchema } from '../types/validation';
-import { Message } from '../types/database';
+import { ValidationSchema, Message } from '../types';
 import { ValidationError } from '../errors';
 
 /**

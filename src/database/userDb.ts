@@ -1,7 +1,7 @@
 import { Collection } from 'lokijs';
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
-import { User, LoginCredentials } from '../types/auth';
+import { User, LoginCredentials } from '../types';
 import { DatabaseError } from '../errors';
 import Logger from '../logger';
 

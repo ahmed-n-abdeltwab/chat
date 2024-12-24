@@ -1,4 +1,4 @@
-import { ErrorCode, ErrorDetails } from '../types/error';
+import { ErrorCode, ErrorDetails } from '../types';
 
 /**
  * Base class for application errors.

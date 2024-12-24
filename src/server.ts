@@ -1,6 +1,6 @@
 import { Server } from 'node:http';
-import { createServer } from './config/websocket';
-import { setupProcessHandlers } from './utils/server/processHandlers';
+import { createServer } from './config';
+import { setupProcessHandlers } from './utils';
 import Logger from './logger';
 
 /**

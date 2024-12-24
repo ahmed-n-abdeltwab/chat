@@ -1,11 +1,8 @@
 import WebSocket from 'ws';
-import { Message, MessageResponse } from '../types/database';
-import { WebSocketHandler } from '../types/server/websocket';
+import { Message, MessageResponse, WebSocketHandler } from '../types';
 import { MessageService } from './messageService';
-import { WebSocketManager } from '../utils/server/websocket';
 import { validateMessage } from '../utils/validation';
-import { safeJsonParse } from '../utils/server/helpers';
-import { withErrorHandler } from '../utils/asyncHandler';
+import { safeJsonParse, withErrorHandler, WebSocketManager } from '../utils';
 import Logger from '../logger';
 
 /**

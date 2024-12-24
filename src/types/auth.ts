@@ -1,10 +1,4 @@
-export interface User {
-  id: string;
-  email: string;
-  password: string;
-  createdAt: Date;
-}
-
+import { User } from './database';
 export interface LoginCredentials {
   email: string;
   password: string;

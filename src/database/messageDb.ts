@@ -1,10 +1,10 @@
 import Loki from 'lokijs';
-import { Message } from '../types/database';
+import { Message } from '../types';
 import { DatabaseError } from '../errors';
 import Logger from '../logger';
-import { dbConfig } from '../config/database';
+import { dbConfig } from '../config';
 import { DatabaseCollections, initializeCollections } from './collections';
-import { validateMessageForDb } from './validators/messageValidator';
+import { validateMessageForDb } from './validators';
 
 /**
  * Class representing the message database.

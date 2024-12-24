@@ -1,16 +1,13 @@
 import express, { Application } from 'express';
+import Loki from 'lokijs';
 import path from 'path';
 import cookieParser from 'cookie-parser';
-import { errorHandler } from '../middleware/error/errorHandler';
-import { requestLogger } from '../middleware/requestLogger';
-import { checkToken } from '../middleware/auth'; // Import checkToken middleware
-import { MessageDb } from '../database/messageDb';
-import { MessageService } from '../services/messageService';
-import { createMessageRoutes } from '../routes/messageRoutes';
-import { createAuthRoutes } from '../routes/authRoutes'; // Import auth routes
-import { initializeCollections } from '../database/collections'; // Import initializeCollections
-import Loki from 'lokijs';
-import { dbConfig } from '../config/database'; // Import dbConfig
+import { errorHandler, requestLogger, checkToken } from '../middleware';
+import { MessageDb, initializeCollections } from '../database';
+import { MessageService } from '../services';
+import { createMessageRoutes, createAuthRoutes } from '../routes';
+import { dbConfig } from '../config'; // Import dbConfig
+import { ServerConfig } from '../types';
 
 let messageService: MessageService;
 
@@ -74,3 +71,14 @@ export function getMessageService(): MessageService {
   }
   return messageService;
 }
+/**
+ * Configuration for the server.
+ */
+export const serverConfig: ServerConfig = {
+  port: Number(process.env.PORT) || 3000,
+  env: process.env.NODE_ENV || 'development',
+  cors: {
+    origin: process.env.CORS_ORIGIN || '*',
+    methods: ['GET', 'POST'],
+  },
+};

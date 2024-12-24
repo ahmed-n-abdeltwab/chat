@@ -1,10 +1,7 @@
 import jwt from 'jsonwebtoken';
-import { UserDb } from '../database/userDb';
-import { LoginCredentials, AuthResponse } from '../types/auth';
+import { UserDb } from '../database';
+import { LoginCredentials, AuthResponse } from '../types';
 import { UnauthorizedError } from '../errors';
-import dotenv from 'dotenv';
-
-dotenv.config();
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
 
