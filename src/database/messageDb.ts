@@ -4,6 +4,7 @@ import { DatabaseError } from '../errors';
 import Logger from '../logger';
 import { dbConfig } from '../config/database';
 import { DatabaseCollections, initializeCollections } from './collections';
+import { validateMessageForDb } from './validators/messageValidator';
 
 /**
  * Class representing the message database.
@@ -37,8 +38,11 @@ export class MessageDb {
    */
   public async saveMessage(message: Message): Promise<Message> {
     try {
+      // Validate message before saving
+      const validatedMessage = validateMessageForDb(message);
+
       const savedMessage = this.collections.messages.insert({
-        ...message,
+        ...validatedMessage,
         timestamp: new Date(),
       });
 
@@ -51,7 +55,9 @@ export class MessageDb {
       return savedMessage;
     } catch (error) {
       Logger.error('Failed to save message:', error as Error);
-      throw new DatabaseError('Failed to save message');
+      throw error instanceof DatabaseError
+        ? error
+        : new DatabaseError('Failed to save message');
     }
   }
 

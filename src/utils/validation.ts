@@ -15,9 +15,16 @@ export function validateMessage(message: Message): Message {
   return message;
 }
 
-export function validate(
+/**
+ * Validates data against a schema.
+ * @param schema - The validation schema.
+ * @param data - The data to validate.
+ * @param path - The path to the data (used for error messages).
+ * @throws {ValidationError} If the data is invalid.
+ */
+export function validate<T>(
   schema: ValidationSchema,
-  data: unknown,
+  data: T, // Use generic type T for data
   path = ''
 ): void {
   if (schema.required && (data === undefined || data === null)) {
@@ -30,16 +37,16 @@ export function validate(
 
   switch (schema.type) {
     case 'string':
-      validateString(schema, data as string, path);
+      validateString(schema, data as unknown as string, path);
       break;
     case 'number':
-      validateNumber(schema, data as number, path);
+      validateNumber(schema, data as unknown as number, path);
       break;
     case 'object':
-      validateObject(schema, data as Record<string, unknown>, path);
+      validateObject(schema, data as unknown as Record<string, unknown>, path);
       break;
     case 'array':
-      validateArray(schema, data as unknown[], path);
+      validateArray(schema, data as unknown as unknown[], path);
       break;
     default:
       throw new Error(`Unsupported type: ${schema.type}`);
@@ -48,7 +55,7 @@ export function validate(
 
 function validateString(
   schema: ValidationSchema,
-  value: unknown,
+  value: string, // Explicitly type value as string
   path: string
 ): void {
   if (typeof value !== 'string') {
@@ -74,7 +81,7 @@ function validateString(
 
 function validateNumber(
   schema: ValidationSchema,
-  value: unknown,
+  value: number, // Explicitly type value as number
   path: string
 ): void {
   if (typeof value !== 'number' || isNaN(value)) {
@@ -92,7 +99,7 @@ function validateNumber(
 
 function validateObject(
   schema: ValidationSchema,
-  value: Record<string, unknown>,
+  value: Record<string, unknown>, // Explicitly type value as Record<string, unknown>
   path: string
 ): void {
   if (typeof value !== 'object' || Array.isArray(value) || value === null) {
@@ -109,7 +116,7 @@ function validateObject(
 
 function validateArray(
   schema: ValidationSchema,
-  value: unknown[],
+  value: unknown[], // Explicitly type value as unknown[]
   path: string
 ): void {
   if (!Array.isArray(value)) {
