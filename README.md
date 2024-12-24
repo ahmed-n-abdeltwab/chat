@@ -1,6 +1,6 @@
 # Chat Project
 
-Welcome to the Chat Project! This project is a simple chat application.
+Welcome to the Chat Project! This project is a simple chat application that allows users to communicate in real-time.
 
 ## Features
 
@@ -8,6 +8,8 @@ Welcome to the Chat Project! This project is a simple chat application.
 - User authentication
 - Private and group chats
 - Message history
+- WebSocket support for live updates
+- REST API for message retrieval and persistence
 
 ## Installation
 
@@ -17,20 +19,67 @@ Welcome to the Chat Project! This project is a simple chat application.
     git clone https://github.com/ahmed-n-abdeltwab/chat.git
     ```
 
-2. Install dependencies:
+2. Navigate to the project directory:
+
+    ```bash
+    cd chat
+    ```
+
+3. Install dependencies:
 
     ```bash
     npm install
     ```
 
-3. Start the server:
+4. Build the project:
 
     ```bash
     npm run build
+    ```
+
+5. Start the server:
+
+    ```bash
     npm start
     ```
 
-4. Open your browser and navigate to `http://localhost:3000`.
+6. Open your browser and navigate to `http://localhost:3000`.
+
+## Usage
+
+### Sending Messages
+
+1. Enter your username in the input field.
+2. Type your message in the message input field.
+3. Click the "Send" button or press "Enter" to send the message.
+
+### Viewing Message History
+
+- The message history is automatically loaded when you open the chat application.
+
+## API Endpoints
+
+### GET /api/messages
+
+- Retrieves all messages from the database.
+
+### POST /api/messages
+
+- Saves a new message to the database.
+- Request body should contain:
+
+  ```json
+  {
+    "username": "your_username",
+    "text": "your_message"
+  }
+  ```
+
+## WebSocket
+
+- The application uses WebSocket for real-time messaging.
+
+- The WebSocket server is integrated with the HTTP server and listens on the same port.
 
 ## Scripts
 
