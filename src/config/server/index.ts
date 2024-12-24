@@ -15,9 +15,9 @@ import { createMessageRoutes } from '../../routes/messageRoutes';
  * - Uses a custom request logger middleware.
  * - Uses a custom error handler middleware (should be the last middleware).
  *
- * @returns {express.Application} The configured Express application instance.
+ * @returns {express.Application, MessageService} The configured Express application instance.
  */
-export function createApp(): express.Application {
+export function createApp(): [express.Application, MessageService] {
   const app = express();
 
   // Static files
@@ -39,5 +39,5 @@ export function createApp(): express.Application {
   // Error handling - should be last
   app.use(errorHandler);
 
-  return app;
+  return [app, messageService];
 }

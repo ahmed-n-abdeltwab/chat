@@ -7,11 +7,11 @@ import Logger from '../../logger';
 
 export async function createServer(): Promise<http.Server> {
   return withErrorHandler(async () => {
-    const app = createApp();
+    const [app, messageService] = createApp();
     const server = http.createServer(app);
 
     // Setup WebSocket
-    setupWebSocket(server);
+    setupWebSocket(server, messageService);
 
     // Start listening
     server.listen(serverConfig.port);
