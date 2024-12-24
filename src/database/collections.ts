@@ -1,11 +1,12 @@
-import { Collection } from 'lokijs';
-import { Message } from '../types/database';
+import Loki from 'lokijs';
+import { Message, User } from '../types/database';
 
 /**
  * Interface representing the database collections.
  */
 export interface DatabaseCollections {
   messages: Collection<Message>;
+  users: Collection<User>;
 }
 
 /**
@@ -21,5 +22,12 @@ export function initializeCollections(db: Loki): DatabaseCollections {
       indices: ['timestamp'],
     });
 
-  return { messages };
+  const users =
+    db.getCollection<User>('users') ||
+    db.addCollection<User>('users', {
+      unique: ['email'],
+      indices: ['email'],
+    });
+
+  return { messages, users };
 }

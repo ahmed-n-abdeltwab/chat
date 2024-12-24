@@ -1,10 +1,14 @@
 import express, { Application } from 'express';
 import path from 'path';
-import { errorHandler } from '../../middleware/error/errorHandler';
-import { requestLogger } from '../../middleware/requestLogger';
-import { MessageDb } from '../../database/messageDb';
-import { MessageService } from '../../services/messageService';
-import { createMessageRoutes } from '../../routes/messageRoutes';
+import { errorHandler } from '../middleware/error/errorHandler';
+import { requestLogger } from '../middleware/requestLogger';
+import { MessageDb } from '../database/messageDb';
+import { MessageService } from '../services/messageService';
+import { createMessageRoutes } from '../routes/messageRoutes';
+import { createAuthRoutes } from '../routes/authRoutes'; // Import auth routes
+import { initializeCollections } from '../database/collections'; // Import initializeCollections
+import Loki from 'lokijs';
+import { dbConfig } from '../config/database'; // Import dbConfig
 
 let messageService: MessageService;
 
@@ -29,12 +33,17 @@ export function createApp(): Application {
   app.use(express.json());
   app.use(requestLogger);
 
+  // Initialize database and collections
+  const db = new Loki(dbConfig.filename, dbConfig.options);
+  const _ = initializeCollections(db);
+
   // Initialize services
   const messageDb = new MessageDb();
   messageService = new MessageService(messageDb);
 
   // Routes
   app.use('/api/messages', createMessageRoutes(messageService));
+  app.use('/api/auth', createAuthRoutes()); // Add auth routes
 
   // Serve the main HTML file for the root route
   app.get('/', (_req, res) => {

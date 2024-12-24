@@ -22,9 +22,9 @@ export interface DbConfig {
  */
 export interface Message {
   /**
-   * The username of the person who sent the message.
+   * The unique identifier of the message.
    */
-  username: string;
+  id: string;
 
   /**
    * The content of the message.
@@ -33,9 +33,13 @@ export interface Message {
 
   /**
    * The timestamp when the message was sent.
-   * Optional.
    */
-  timestamp?: Date;
+  timestamp: Date;
+
+  /**
+   * The username of the person who sent the message.
+   */
+  username: string;
 
   /**
    * The unique identifier of the message.
@@ -64,4 +68,14 @@ export interface MessageResponse {
    * Optional.
    */
   messages?: Message[];
+}
+
+/**
+ * Represents a user.
+ */
+export interface User {
+  id: string;
+  email: string;
+  password: string;
+  createdAt: Date;
 }

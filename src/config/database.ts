@@ -1,10 +1,13 @@
-import { DbConfig } from '../../types/database';
+import { DbConfig } from '../types/database';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 /**
  * Configuration for the database.
  */
 export const dbConfig: DbConfig = {
-  filename: 'data/chat.db', // Store the database in the 'data' directory
+  filename: process.env.DB_FILENAME || 'data/chat.db', // Use environment variable
   options: {
     autoload: true,
     autosave: true,
