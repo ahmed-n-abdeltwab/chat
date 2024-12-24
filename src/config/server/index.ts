@@ -23,7 +23,7 @@ export function createApp(): Application {
   const app = express();
 
   // Static files
-  app.use(express.static(path.join(__dirname, '../public')));
+  app.use(express.static(path.join(__dirname, '../../../public')));
 
   // Middleware
   app.use(express.json());
@@ -35,6 +35,11 @@ export function createApp(): Application {
 
   // Routes
   app.use('/api/messages', createMessageRoutes(messageService));
+
+  // Serve the main HTML file for the root route
+  app.get('/', (_req, res) => {
+    res.sendFile(path.join(__dirname, '../../../public/index.html'));
+  });
 
   // Error handling - should be last
   app.use(errorHandler);
