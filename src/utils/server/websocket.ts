@@ -1,14 +1,13 @@
 import WebSocket from 'ws';
 import { WebSocketClient } from '../../types/server/websocket';
-import { generateId } from './helpers';
 
 export class WebSocketManager {
-  private clients: Map<string, WebSocketClient> = new Map();
+  private clients: Map<string, WebSocket> = new Map();
 
   public addClient(ws: WebSocket): WebSocketClient {
-    const client = { ws, id: generateId() };
-    this.clients.set(client.id, client);
-    return client;
+    const id = this.generateClientId();
+    this.clients.set(id, ws);
+    return { id };
   }
 
   public removeClient(id: string): void {
@@ -18,13 +17,16 @@ export class WebSocketManager {
   public broadcast(data: unknown): void {
     const message = JSON.stringify(data);
     this.clients.forEach(client => {
-      if (client.ws.readyState === WebSocket.OPEN) {
-        client.ws.send(message);
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(message);
       }
     });
   }
 
   public getClientCount(): number {
     return this.clients.size;
+  }
+  private generateClientId(): string {
+    return Math.random().toString(36).slice(2, 9);
   }
 }

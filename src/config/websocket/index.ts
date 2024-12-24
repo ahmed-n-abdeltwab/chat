@@ -35,13 +35,15 @@ export async function createServer(): Promise<Server> {
     setupWebSocket(server, getMessageService());
 
     return new Promise<Server>((resolve, reject) => {
-      server.listen(serverConfig.port, () => {
-        Logger.info(`Server is running on port ${serverConfig.port}`);
-        resolve(server);
-      }).on('error', (error: Error) => {
-        Logger.error('Failed to start server:', error);
-        reject(error);
-      });
+      server
+        .listen(serverConfig.port, () => {
+          Logger.info(`Server is running on port ${serverConfig.port}`);
+          resolve(server);
+        })
+        .on('error', (error: Error) => {
+          Logger.error('Failed to start server:', error);
+          reject(error);
+        });
     });
   }, 'Failed to create and start the server');
 }
