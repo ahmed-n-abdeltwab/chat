@@ -1,0 +1,31 @@
+import { Request, Response, NextFunction } from 'express';
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
+
+/**
+ * Middleware to check for the presence of a token.
+ * If the token is not present, redirect to the login page.
+ * If the token is present, verify it and proceed to the next middleware.
+ */
+export function checkToken(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): void {
+  const token = req.cookies.token;
+
+  if (!token) {
+    return res.redirect('/login.html');
+  }
+
+  try {
+    jwt.verify(token, JWT_SECRET);
+    next();
+  } catch {
+    return res.redirect('/login.html');
+  }
+}

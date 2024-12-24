@@ -28,7 +28,7 @@ async function handleLogin(e) {
 
         const data = await response.json();
         if (data.token) {
-            localStorage.setItem('token', data.token);
+            document.cookie = `token=${data.token}; path=/`;
             window.location.href = '/index.html';
         } else {
             alert('Login failed: ' + data.message);
@@ -55,7 +55,7 @@ async function handleRegister(e) {
 
         const data = await response.json();
         if (data.token) {
-            localStorage.setItem('token', data.token);
+            document.cookie = `token=${data.token}; path=/`;
             window.location.href = '/index.html';
         } else {
             alert('Registration failed: ' + data.message);
