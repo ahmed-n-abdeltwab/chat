@@ -1,5 +1,8 @@
 import { ErrorCode, ErrorDetails } from '../types/error';
 
+/**
+ * Base class for application errors.
+ */
 export class AppError extends Error {
   constructor(
     message: string,

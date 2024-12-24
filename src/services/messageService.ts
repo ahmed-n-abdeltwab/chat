@@ -19,7 +19,6 @@ export class MessageService {
    * @throws An error if the message could not be saved.
    */
   public async saveMessage(message: Message): Promise<Message> {
-    // Implementation here
     return withErrorHandler(
       async () => this.db.saveMessage(message),
       'Error saving message'
@@ -32,7 +31,6 @@ export class MessageService {
    * @throws An error if the messages could not be fetched.
    */
   public async getMessages(): Promise<Message[]> {
-    // Implementation here
     return withErrorHandler(
       async () => this.db.getMessages(),
       'Error fetching messages'

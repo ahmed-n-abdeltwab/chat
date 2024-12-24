@@ -1,27 +1,46 @@
-import http from 'http';
+import { Server } from 'node:http';
 import WebSocket from 'ws';
-import { MessageDb } from '../../database/messageDb';
 import { MessageService } from '../../services/messageService';
 import { WebSocketService } from '../../services/websocketService';
 import { withErrorHandler } from '../../utils/asyncHandler';
 
 /**
- * Sets up a WebSocket server using the provided HTTP server.
+ * Sets up the WebSocket server and integrates it with the HTTP server.
  *
- * @param server - The HTTP server to attach the WebSocket server to.
- * @returns The configured WebSocket server instance.
- * @throws Will throw an error if the WebSocket server setup fails.
+ * This function performs the following steps:
+ * 1. Creates a new WebSocket server instance.
+ * 2. Integrates the WebSocket server with the provided HTTP server.
+ * 3. Initializes the WebSocket service with the message service.
+ * 4. Sets up event handlers for WebSocket connections.
+ *
+ * @param {Server} server - The HTTP server instance.
+ * @param {MessageService} messageService - The message service instance.
+ * @returns {Promise<WebSocket.Server>} A promise that resolves to the WebSocket server instance.
+ *
+ * @example
+ * ```typescript
+ * setupWebSocket(server, messageService)
+ *   .then(wsServer => {
+ *     console.log('WebSocket server is running');
+ *   })
+ *   .catch(error => {
+ *     console.error('Failed to set up WebSocket server:', error);
+ *   });
+ * ```
  */
-export function setupWebSocket(server: http.Server): Promise<WebSocket.Server> {
+export function setupWebSocket(
+  server: Server,
+  messageService: MessageService
+): Promise<WebSocket.Server> {
   return withErrorHandler(async () => {
-    const wss = new WebSocket.Server({ server });
-    const messageDb = new MessageDb();
-    const messageService = new MessageService(messageDb);
-    const websocketService = new WebSocketService(messageService);
+    const wsServer = new WebSocket.Server({ server });
 
-    wss.on('connection', (ws: WebSocket) => {
-      websocketService.handleConnection(ws);
+    const webSocketService = new WebSocketService(messageService);
+
+    wsServer.on('connection', (socket: WebSocket) => {
+      webSocketService.handleConnection(socket);
     });
-    return wss;
+
+    return wsServer;
   }, 'Failed to setup WebSocket server:');
 }

@@ -4,11 +4,21 @@ import { DatabaseError } from '../errors';
 import Logger from '../logger';
 import { dbConfig } from '../config/database';
 import { DatabaseCollections, initializeCollections } from './collections';
+import { validateMessageForDb } from './validators/messageValidator';
 
+/**
+ * Class representing the message database.
+ */
 export class MessageDb {
   private db: Loki;
   private collections: DatabaseCollections;
 
+  /**
+   * Creates an instance of MessageDb.
+   * Initializes the database and collections.
+   * Logs the initialization status.
+   * @throws {DatabaseError} If the database initialization fails.
+   */
   constructor() {
     try {
       this.db = new Loki(dbConfig.filename, dbConfig.options);
@@ -20,10 +30,19 @@ export class MessageDb {
     }
   }
 
+  /**
+   * Saves a message to the database.
+   * @param message - The message to be saved.
+   * @returns A promise that resolves to the saved message.
+   * @throws {DatabaseError} If the message could not be saved.
+   */
   public async saveMessage(message: Message): Promise<Message> {
     try {
+      // Validate message before saving
+      const validatedMessage = validateMessageForDb(message);
+
       const savedMessage = this.collections.messages.insert({
-        ...message,
+        ...validatedMessage,
         timestamp: new Date(),
       });
 
@@ -36,10 +55,17 @@ export class MessageDb {
       return savedMessage;
     } catch (error) {
       Logger.error('Failed to save message:', error as Error);
-      throw new DatabaseError('Failed to save message');
+      throw error instanceof DatabaseError
+        ? error
+        : new DatabaseError('Failed to save message');
     }
   }
 
+  /**
+   * Retrieves all messages from the database.
+   * @returns A promise that resolves to an array of messages.
+   * @throws {DatabaseError} If the messages could not be fetched.
+   */
   public async getMessages(): Promise<Message[]> {
     try {
       return this.collections.messages.chain().simplesort('timestamp').data();
