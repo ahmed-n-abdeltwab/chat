@@ -1,6 +1,8 @@
 import WebSocket from 'ws';
 import { WebSocketClient } from '../../types/server/websocket';
-
+/**
+ * Manages WebSocket connections.
+ */
 export class WebSocketManager {
   private clients: Map<string, WebSocket> = new Map();
 

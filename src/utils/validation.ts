@@ -1,25 +1,18 @@
 import { ValidationSchema } from '../types/validation';
 import { Message } from '../types/database';
+import { ValidationError } from '../errors';
 
-export function validateMessage(message: unknown): Message {
-  if (!message || typeof message !== 'object') {
-    throw new Error('Message object is required');
+/**
+ * Validates a message object.
+ * @param message - The message to validate.
+ * @returns The validated message.
+ * @throws {ValidationError} If the message is invalid.
+ */
+export function validateMessage(message: Message): Message {
+  if (!message.text || typeof message.text !== 'string') {
+    throw new ValidationError('Invalid message text');
   }
-
-  const msg = message as Partial<Message>;
-
-  if (!msg.username || typeof msg.username !== 'string') {
-    throw new Error('Username is required and must be a string');
-  }
-
-  if (!msg.text || typeof msg.text !== 'string') {
-    throw new Error('Message text is required and must be a string');
-  }
-
-  return {
-    username: msg.username.trim(),
-    text: msg.text.trim(),
-  };
+  return message;
 }
 
 export function validate(

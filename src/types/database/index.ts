@@ -10,11 +10,11 @@ export interface DbConfig {
   /**
    * A flag indicating whether the database should be autoloaded.
    */
-  options?: {
+  options: {
     autoload: boolean;
     autosave: boolean;
     autosaveInterval: number;
-    persistenceMethod: 'fs' | 'localStorage' | 'memory' | null | undefined;
+    persistenceMethod: 'fs';
   };
 }
 /**

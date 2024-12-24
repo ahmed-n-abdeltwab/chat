@@ -17,31 +17,13 @@ export interface ServerInstance {
 }
 
 /**
- * Configuration options for the server.
+ * Represents the server configuration.
  */
 export interface ServerConfig {
-  /**
-   * The port number on which the server will listen.
-   */
   port: number;
-
-  /**
-   * The environment in which the server is running (e.g., 'development', 'production').
-   */
   env: string;
-
-  /**
-   * Configuration for Cross-Origin Resource Sharing (CORS).
-   */
   cors: {
-    /**
-     * The origin that is allowed to access the server.
-     */
     origin: string;
-
-    /**
-     * The HTTP methods that are allowed for CORS.
-     */
     methods: string[];
   };
 }

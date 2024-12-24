@@ -5,17 +5,19 @@ export interface ErrorResponse {
   details?: ErrorDetails;
 }
 
+/**
+ * Represents additional error details.
+ */
 export interface ErrorDetails {
-  path?: string;
-  value?: unknown;
-  reason?: string;
+  [key: string]: string | number | boolean | ErrorDetails;
 }
 
+/**
+ * Represents the error code.
+ */
 export type ErrorCode =
-  | 'VALIDATION_ERROR'
   | 'DATABASE_ERROR'
+  | 'VALIDATION_ERROR'
   | 'NOT_FOUND'
   | 'UNAUTHORIZED'
-  | 'FORBIDDEN'
-  | 'BAD_REQUEST'
-  | 'INTERNAL_ERROR';
+  | 'FORBIDDEN';

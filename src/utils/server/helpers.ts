@@ -1,10 +1,13 @@
-import Logger from '../../logger';
-
-export function safeJsonParse<T>(data: string): T {
+/**
+ * Safely parses a JSON string.
+ * @param jsonString - The JSON string to parse.
+ * @returns The parsed object.
+ * @throws {Error} If the JSON string is invalid.
+ */
+export function safeJsonParse<T>(jsonString: string): T {
   try {
-    return JSON.parse(data) as T;
-  } catch (error) {
-    Logger.error('Failed to parse JSON data:', error as Error);
-    throw new Error('Invalid JSON data');
+    return JSON.parse(jsonString) as T;
+  } catch {
+    throw new Error('Invalid JSON string');
   }
 }
