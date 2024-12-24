@@ -1,52 +1,38 @@
 import WebSocket from 'ws';
 import { Message, MessageResponse } from '../types/database';
+import { WebSocketHandler } from '../types/server/websocket';
 import { MessageService } from './messageService';
+import { WebSocketManager } from '../utils/server/websocket';
 import { validateMessage } from '../utils/validation';
+import { safeJsonParse } from '../utils/server/helpers';
 import { withErrorHandler } from '../utils/asyncHandler';
 import Logger from '../logger';
 
 /**
  * Service to manage WebSocket connections and handle communication between clients.
  */
-export class WebSocketService {
-  /**
-   * Set of connected WebSocket clients.
-   */
-  private clients: Set<WebSocket>;
+export class WebSocketService implements WebSocketHandler {
+  private wsManager: WebSocketManager;
 
-  /**
-   * Constructs a new WebSocketService.
-   * @param messageService - Service to handle message-related operations.
-   */
   constructor(private messageService: MessageService) {
-    this.clients = new Set();
+    this.wsManager = new WebSocketManager();
   }
 
-  /**
-   * Handles a new WebSocket connection.
-   * @param ws - The WebSocket connection to handle.
-   */
   public handleConnection(ws: WebSocket): void {
-    this.addClient(ws);
+    const client = this.wsManager.addClient(ws);
+    Logger.info(
+      `Client connected. Total clients: ${this.wsManager.getClientCount()}`
+    );
+
     this.sendMessageHistory(ws);
     this.setupMessageHandler(ws);
-    this.setupDisconnectHandler(ws);
-    this.setupErrorHandler(ws);
+    this.setupDisconnectHandler(ws, client.id);
   }
 
-  /**
-   * Adds a WebSocket client to the set of connected clients.
-   * @param ws - The WebSocket client to add.
-   */
-  private addClient(ws: WebSocket): void {
-    this.clients.add(ws);
-    Logger.info(`Client connected. Total clients: ${this.clients.size}`);
+  public broadcast(data: unknown): void {
+    this.wsManager.broadcast(data);
   }
 
-  /**
-   * Sends the message history to a newly connected WebSocket client.
-   * @param ws - The WebSocket client to send the message history to.
-   */
   private async sendMessageHistory(ws: WebSocket): Promise<void> {
     await withErrorHandler(async () => {
       const messages = await this.messageService.getMessages();
@@ -55,72 +41,24 @@ export class WebSocketService {
     }, 'Error sending message history');
   }
 
-  /**
-   * Sets up the message handler for a WebSocket client.
-   * @param ws - The WebSocket client to set up the message handler for.
-   */
   private setupMessageHandler(ws: WebSocket): void {
     ws.on('message', async (data: WebSocket.Data) => {
-      try {
-        const message: Message = JSON.parse(data.toString());
+      await withErrorHandler(async () => {
+        const message = safeJsonParse<Message>(data.toString());
         const validatedMessage = validateMessage(message);
         const savedMessage =
           await this.messageService.saveMessage(validatedMessage);
-        this.broadcastMessage(savedMessage);
-      } catch (error) {
-        Logger.error('Error handling message:', error as Error);
-        this.sendErrorToClient(ws, error as Error);
-      }
+        this.broadcast({ type: 'message', message: savedMessage });
+      }, 'Error handling message');
     });
   }
 
-  /**
-   * Sets up the disconnect handler for a WebSocket client.
-   * @param ws - The WebSocket client to set up the disconnect handler for.
-   */
-  private setupDisconnectHandler(ws: WebSocket): void {
+  private setupDisconnectHandler(ws: WebSocket, clientId: string): void {
     ws.on('close', () => {
-      this.clients.delete(ws);
-      Logger.info(`Client disconnected. Total clients: ${this.clients.size}`);
-    });
-  }
-
-  /**
-   * Sets up the error handler for a WebSocket client.
-   * @param ws - The WebSocket client to set up the error handler for.
-   */
-  private setupErrorHandler(ws: WebSocket): void {
-    ws.on('error', error => {
-      Logger.error('WebSocket error:', error);
-      this.clients.delete(ws);
-    });
-  }
-
-  /**
-   * Sends an error message to a WebSocket client.
-   * @param ws - The WebSocket client to send the error message to.
-   * @param error - The error to send.
-   */
-  private sendErrorToClient(ws: WebSocket, error: Error): void {
-    const errorResponse = {
-      type: 'error',
-      message: error.message,
-    };
-    ws.send(JSON.stringify(errorResponse));
-  }
-
-  /**
-   * Broadcasts a message to all connected WebSocket clients.
-   * @param message - The message to broadcast.
-   */
-  private broadcastMessage(message: Message): void {
-    const response: MessageResponse = { type: 'message', message };
-    const messageData = JSON.stringify(response);
-
-    this.clients.forEach(client => {
-      if (client.readyState === WebSocket.OPEN) {
-        client.send(messageData);
-      }
+      this.wsManager.removeClient(clientId);
+      Logger.info(
+        `Client disconnected. Total clients: ${this.wsManager.getClientCount()}`
+      );
     });
   }
 }

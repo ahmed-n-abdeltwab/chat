@@ -1,14 +1,14 @@
-import http from 'http';
+import { Server } from 'node:http';
 import { createApp } from '../server';
 import { setupWebSocket } from './websocket';
 import { serverConfig } from '..';
 import { withErrorHandler } from '../../utils/asyncHandler';
 import Logger from '../../logger';
 
-export async function createServer(): Promise<http.Server> {
+export async function createServer(): Promise<Server> {
   return withErrorHandler(async () => {
     const [app, messageService] = createApp();
-    const server = http.createServer(app);
+    const server = new Server(app);
 
     // Setup WebSocket
     setupWebSocket(server, messageService);

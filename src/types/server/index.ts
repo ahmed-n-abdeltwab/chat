@@ -1,4 +1,4 @@
-import { Server as HttpServer } from 'http';
+import { Server as HttpServer } from 'node:http';
 import { Server as WebSocketServer } from 'ws';
 
 /**

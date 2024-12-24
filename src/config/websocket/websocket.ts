@@ -1,4 +1,4 @@
-import http from 'http';
+import { Server } from 'node:http';
 import WebSocket from 'ws';
 import { MessageService } from '../../services/messageService';
 import { WebSocketService } from '../../services/websocketService';
@@ -12,7 +12,7 @@ import { withErrorHandler } from '../../utils/asyncHandler';
  * @throws Will throw an error if the WebSocket server setup fails.
  */
 export function setupWebSocket(
-  server: http.Server,
+  server: Server,
   messageService: MessageService
 ): Promise<WebSocket.Server> {
   return withErrorHandler(async () => {
