@@ -1,15 +1,10 @@
 import express, { Application } from 'express';
-import Loki from 'lokijs';
 import path from 'path';
 import cookieParser from 'cookie-parser';
 import { errorHandler, requestLogger, checkToken } from '../middleware';
-import { MessageDb, initializeCollections } from '../database';
-import { MessageService } from '../services';
 import { createMessageRoutes, createAuthRoutes } from '../routes';
-import { dbConfig } from '../config'; // Import dbConfig
-
-let messageService: MessageService;
-
+import { MessageService } from '../services';
+import { DatabaseCollections } from '../database';
 /**
  * Creates and configures an Express application.
  *
@@ -21,7 +16,10 @@ let messageService: MessageService;
  *
  * @returns {Application} The configured Express application instance.
  */
-export function createApp(): Application {
+export function createApp(
+  messageService: MessageService,
+  collections: DatabaseCollections
+): Application {
   const app = express();
 
   // Middleware
@@ -32,21 +30,12 @@ export function createApp(): Application {
   // Serve static files
   app.use(express.static(path.join(__dirname, '../../public')));
 
-  // Middleware to check for token on protected routes
-  app.use('/api/messages', checkToken);
-  app.use('/', checkToken);
-
-  // Initialize database and collections
-  const db = new Loki(dbConfig.filename, dbConfig.options);
-  const collections = initializeCollections(db);
-
-  // Initialize services
-  const messageDb = new MessageDb();
-  messageService = new MessageService(messageDb);
-
   // Routes
-  app.use('/api/messages', createMessageRoutes(messageService));
-  app.use('/api/auth', createAuthRoutes()); // Add auth routes
+  app.use('/api/messages', checkToken, createMessageRoutes(messageService));
+  app.use('/api/auth', createAuthRoutes(collections)); // Pass collections to createAuthRoutes
+
+  // Middleware to check for token on the root route
+  app.use(checkToken);
 
   // Serve the main HTML file for the root route
   app.get('/', (_req, res) => {
@@ -65,9 +54,3 @@ export function createApp(): Application {
  * @returns {MessageService} The message service instance.
  * @throws {Error} If the message service has not been initialized.
  */
-export function getMessageService(): MessageService {
-  if (!messageService) {
-    throw new Error('MessageService has not been initialized');
-  }
-  return messageService;
-}

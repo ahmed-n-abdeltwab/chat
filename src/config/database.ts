@@ -1,7 +1,4 @@
 import { DbConfig } from '../types/database';
-import dotenv from 'dotenv';
-
-dotenv.config();
 
 /**
  * Configuration for the database.

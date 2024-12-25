@@ -1,16 +1,13 @@
-import Loki from 'lokijs';
 import { Message } from '../types';
 import { DatabaseError } from '../errors';
 import Logger from '../logger';
-import { dbConfig } from '../config';
-import { DatabaseCollections, initializeCollections } from './collections';
+import { DatabaseCollections } from './collections';
 import { validateMessageForDb } from './validators';
 
 /**
  * Class representing the message database.
  */
 export class MessageDb {
-  private db: Loki;
   private collections: DatabaseCollections;
 
   /**
@@ -19,11 +16,9 @@ export class MessageDb {
    * Logs the initialization status.
    * @throws {DatabaseError} If the database initialization fails.
    */
-  constructor() {
+  constructor(collections: DatabaseCollections) {
     try {
-      this.db = new Loki(dbConfig.filename, dbConfig.options);
-      this.collections = initializeCollections(this.db);
-      Logger.info('Message database initialized successfully');
+      this.collections = collections;
     } catch (error) {
       Logger.error('Failed to initialize database:', error as Error);
       throw new DatabaseError('Database initialization failed');

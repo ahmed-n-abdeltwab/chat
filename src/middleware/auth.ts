@@ -14,9 +14,7 @@ export function checkToken(
   next: NextFunction
 ): void {
   const token = req.cookies.token;
-  console.log(token);
   if (!token) {
-    console.log(!token);
     return res.redirect('/login.html');
   }
 

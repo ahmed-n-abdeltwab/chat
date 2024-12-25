@@ -1,10 +1,11 @@
 import { Server } from 'node:http';
-import { createApp, getMessageService } from '../server';
+import { createApp } from '../server';
 import { setupWebSocket } from './websocket';
 import { serverConfig } from '../';
 import { withErrorHandler } from '../../utils/asyncHandler';
 import Logger from '../../logger';
-
+import { initializeDatabase } from '../../database';
+import { initializeServices } from '../../services';
 /**
  * Creates and starts the HTTP server with WebSocket support.
  *
@@ -29,10 +30,16 @@ import Logger from '../../logger';
  */
 export async function createServer(): Promise<Server> {
   return withErrorHandler(async () => {
-    const app = createApp();
+    // Initialize database and collections
+    const { collections } = initializeDatabase();
+
+    // Initialize services
+    const { messageService } = initializeServices(collections);
+
+    const app = createApp(messageService, collections);
     const server = new Server(app);
 
-    setupWebSocket(server, getMessageService());
+    setupWebSocket(server, messageService);
 
     return new Promise<Server>((resolve, reject) => {
       server
