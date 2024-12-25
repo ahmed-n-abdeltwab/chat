@@ -7,7 +7,6 @@ import { MessageDb, initializeCollections } from '../database';
 import { MessageService } from '../services';
 import { createMessageRoutes, createAuthRoutes } from '../routes';
 import { dbConfig } from '../config'; // Import dbConfig
-import { ServerConfig } from '../types';
 
 let messageService: MessageService;
 
@@ -25,17 +24,21 @@ let messageService: MessageService;
 export function createApp(): Application {
   const app = express();
 
-  // Static files
-  app.use(express.static(path.join(__dirname, '../../public')));
-
   // Middleware
   app.use(express.json());
   app.use(cookieParser()); // Add cookie parser middleware
   app.use(requestLogger);
 
+  // Serve static files
+  app.use(express.static(path.join(__dirname, '../../public')));
+
+  // Middleware to check for token on protected routes
+  app.use('/api/messages', checkToken);
+  app.use('/', checkToken);
+
   // Initialize database and collections
   const db = new Loki(dbConfig.filename, dbConfig.options);
-  const _ = initializeCollections(db);
+  const collections = initializeCollections(db);
 
   // Initialize services
   const messageDb = new MessageDb();
@@ -44,9 +47,6 @@ export function createApp(): Application {
   // Routes
   app.use('/api/messages', createMessageRoutes(messageService));
   app.use('/api/auth', createAuthRoutes()); // Add auth routes
-
-  // Middleware to check for token
-  app.use(checkToken);
 
   // Serve the main HTML file for the root route
   app.get('/', (_req, res) => {
@@ -71,14 +71,3 @@ export function getMessageService(): MessageService {
   }
   return messageService;
 }
-/**
- * Configuration for the server.
- */
-export const serverConfig: ServerConfig = {
-  port: Number(process.env.PORT) || 3000,
-  env: process.env.NODE_ENV || 'development',
-  cors: {
-    origin: process.env.CORS_ORIGIN || '*',
-    methods: ['GET', 'POST'],
-  },
-};

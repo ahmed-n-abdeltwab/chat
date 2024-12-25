@@ -43,7 +43,7 @@ export class WebSocketService implements WebSocketHandler {
       await withErrorHandler(async () => {
         const message = safeJsonParse<Message>(data.toString());
         const validatedMessage = validateMessage(message);
-        this.broadcast({ type: 'message', message:validatedMessage });
+        this.broadcast({ type: 'message', message: validatedMessage });
       }, 'Error handling message');
     });
   }
