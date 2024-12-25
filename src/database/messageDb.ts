@@ -40,12 +40,10 @@ export class MessageDb {
     try {
       // Validate message before saving
       const validatedMessage = validateMessageForDb(message);
-
       const savedMessage = this.collections.messages.insert({
         ...validatedMessage,
         timestamp: new Date(),
       });
-
       if (!savedMessage) {
         throw new DatabaseError(
           'Failed to save message - no document returned'

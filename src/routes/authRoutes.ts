@@ -1,9 +1,9 @@
+import Loki from 'lokijs';
 import { Router } from 'express';
 import { AuthService } from '../services';
 import { UserDb, initializeCollections } from '../database';
-import { asyncRouteHandler } from '../utils';
-import Loki from 'lokijs';
 import { dbConfig } from '../config'; // Import dbConfig
+import { AuthController } from '../controllers';
 
 export function createAuthRoutes(): Router {
   const router = Router();
@@ -15,24 +15,11 @@ export function createAuthRoutes(): Router {
   // Pass the users collection to UserDb
   const userDb = new UserDb(collections.users);
   const authService = new AuthService(userDb);
+  const controller = new AuthController(authService);
 
-  router.post(
-    '/login',
-    asyncRouteHandler(async (req, res) => {
-      const { email, password } = req.body;
-      const response = await authService.login({ email, password });
-      res.json(response);
-    })
-  );
+  router.post('/login', controller.login);
 
-  router.post(
-    '/register',
-    asyncRouteHandler(async (req, res) => {
-      const { email, password } = req.body;
-      const response = await authService.register({ email, password });
-      res.json(response);
-    })
-  );
+  router.post('/register', controller.register);
 
   return router;
 }
