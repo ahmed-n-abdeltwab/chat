@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { MessageService } from '../services/messageService';
-import { asyncRouteHandler } from '../utils/asyncHandler';
+import { MessageService } from '../services';
+import { asyncRouteHandler } from '../utils';
 
 export class MessageController {
   constructor(private messageService: MessageService) {}

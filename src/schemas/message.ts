@@ -1,4 +1,4 @@
-import { ValidationSchema } from '../types/validation';
+import { ValidationSchema } from '../types';
 
 export const messageSchema: ValidationSchema = {
   type: 'object',

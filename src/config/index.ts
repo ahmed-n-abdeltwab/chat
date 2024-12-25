@@ -1,5 +1,11 @@
 import { ServerConfig } from '../types/server';
 
+// Load environment variables
+import './dotenv';
+
+export * from './database';
+export * from './server';
+export * from './websocket';
 /**
  * Configuration for the server.
  */

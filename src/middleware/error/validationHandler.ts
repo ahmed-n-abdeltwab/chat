@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { ValidationError } from '../../errors';
 import { validate } from '../../utils/validation';
-import { ValidationSchema } from '../../types/validation';
+import { ValidationSchema } from '../../types';
 
 export function validationHandler(schema: ValidationSchema) {
   return (req: Request, _res: Response, next: NextFunction): void => {

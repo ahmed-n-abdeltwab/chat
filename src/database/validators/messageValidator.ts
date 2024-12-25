@@ -1,6 +1,6 @@
-import { Message } from '../../types/database';
-import { messageSchema } from '../../schemas/message';
-import { ValidationError } from '../../errors/';
+import { Message } from '../../types/';
+import { messageSchema } from '../../schemas';
+import { ValidationError } from '../../errors';
 import { validate } from '../../utils/validation';
 
 /**

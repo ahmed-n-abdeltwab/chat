@@ -1,7 +1,6 @@
 import { Router } from 'express';
-import { MessageController } from '../controllers/messageController';
-import { MessageService } from '../services/messageService';
-
+import { MessageController } from '../controllers';
+import { MessageService } from '../services';
 /**
  * Creates routes for message-related operations.
  *

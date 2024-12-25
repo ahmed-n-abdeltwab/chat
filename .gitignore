@@ -1,5 +1,28 @@
-# ignore node modules
-node_modules
-.vscode
-*package-lock.json
-logs
+# Node modules
+node_modules/
+
+# Logs
+logs/
+*.log
+
+# Dependency directories
+package-lock.json
+
+# IDE files
+.vscode/
+.idea/
+
+# Build output
+dist/
+build/
+coverage/
+
+# Environment files
+.env*
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Database files
+*.db
