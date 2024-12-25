@@ -47,10 +47,3 @@ export function createApp(
 
   return app;
 }
-
-/**
- * Gets the initialized message service.
- *
- * @returns {MessageService} The message service instance.
- * @throws {Error} If the message service has not been initialized.
- */
